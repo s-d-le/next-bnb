@@ -1,3 +1,4 @@
+// Using prisma to create a new user. Getting called by RegisterModal.tsx
 import bcrypt from "bcrypt";
 import prisma from "@/app/libs/prismadb";
 import { NextResponse } from "next/server";
