@@ -11,18 +11,21 @@ export async function getCurrentUser() {
   try {
     const session = await getSession();
     //Session not exists
-    if (!session) {
+    if (!session?.user?.email) {
       return null;
     }
+
     //Prisma.user is genereated by prisma after npx prisma db push
     const currentUser = await prisma.user.findUnique({
       where: {
         email: session.user?.email as string,
       },
     });
+
     if (!currentUser) {
       return null;
     }
+
     //Fix SSR issue with dates
     return {
       ...currentUser,
