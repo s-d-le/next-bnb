@@ -100,12 +100,12 @@ const LoginModal = () => {
       />
       <div className="mt-4 text-center font-light text-neutral-500">
         <div className="flex flex-row items-center justify-center gap-2">
-          <div>Already have an account?</div>
+          <div>Don{"'"}t have an account yet?</div>
           <div
             className="cursor-pointer text-neutral-800 hover:underline"
             onClick={onToggle}
           >
-            Log in
+            Create an account
           </div>
         </div>
       </div>
