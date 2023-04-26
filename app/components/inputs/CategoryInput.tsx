@@ -2,15 +2,15 @@
 
 import { IconType } from "react-icons";
 
-interface CategoryBoxProps {
+interface CategoryInputProps {
   icon: IconType;
   label: string;
   selected?: boolean;
   onClick: (value: string) => void;
 }
 
-const CategoryBox: React.FC<CategoryBoxProps> = ({
-  icon: Icon,
+const CategoryInput: React.FC<CategoryInputProps> = ({
+  icon: Icon, //remap as component
   label,
   selected,
   onClick,
@@ -37,4 +37,4 @@ const CategoryBox: React.FC<CategoryBoxProps> = ({
   );
 };
 
-export default CategoryBox;
+export default CategoryInput;
