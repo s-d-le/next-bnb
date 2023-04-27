@@ -47,6 +47,7 @@ const RentModal = () => {
 
   //Watch for changes in the category field from defaultValues
   const watchedCategory = watch("category");
+  const watchedLocation = watch("location");
 
   //setValue doesnt trigger a re-render. Use setCustomValue to trigger a re-render
   //use it in the onClick of the CategoryInput to set the value of the category
@@ -116,7 +117,12 @@ const RentModal = () => {
           title="Where is your place located?"
           subtitle="Help guests find you!"
         />
-        <CountrySelect onChange={() => {}} />
+        <CountrySelect
+          value={watchedLocation}
+          onChange={(value) => {
+            setCustomValue("location", value);
+          }}
+        />
       </div>
     );
   }

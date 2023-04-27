@@ -16,11 +16,44 @@ interface CountrySelectProps {
   onChange: (value: CountrySelectValue) => void;
 }
 
+//Better looking options for Select
+const customOption = (option: any) => (
+  <div className="flex flex-row items-center gap-3">
+    <div>{option.flag}</div>
+    <div>
+      {option.label}
+      <span className="ml-1 text-neutral-500">{option.region}</span>
+    </div>
+  </div>
+);
+
 const CountrySelect: React.FC<CountrySelectProps> = ({ value, onChange }) => {
   const { getAll } = useCountries();
   return (
     <div>
-      <Select placeholder="Anywhere" isClearable options={getAll()} />
+      <Select
+        placeholder="Anywhere"
+        isClearable
+        options={getAll()}
+        value={value}
+        onChange={(value) => onChange(value as CountrySelectValue)}
+        formatOptionLabel={(option: any) => customOption(option)}
+        classNames={{
+          control: () => "p-3 border-2",
+          input: () => "text-lg",
+          option: () => "text-lg",
+        }}
+        theme={(theme) => ({
+          ...theme,
+          borderRadius: 6,
+          colors: {
+            //preserve colors but modify primary
+            ...theme.colors,
+            primary: "black",
+            primary25: "#ffe4e6",
+          },
+        })}
+      />
     </div>
   );
 };
