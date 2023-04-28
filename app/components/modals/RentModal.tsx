@@ -8,6 +8,7 @@ import Heading from "../Heading";
 import { categories } from "../navbar/Categories";
 import CategoryInput from "../inputs/CategoryInput";
 import CountrySelect from "../inputs/CountrySelect";
+import dynamic from "next/dynamic";
 
 enum STEPS {
   CATEGORY = 0,
@@ -48,6 +49,15 @@ const RentModal = () => {
   //Watch for changes in the category field from defaultValues
   const watchedCategory = watch("category");
   const watchedLocation = watch("location");
+
+  //Import and render map dynamically based on location change. Use useMemo to prevent re-rendering
+  const Map = useMemo(
+    () =>
+      dynamic(() => import("../Map"), {
+        ssr: false, //no ssr loading for Map
+      }),
+    [watchedLocation]
+  );
 
   //setValue doesnt trigger a re-render. Use setCustomValue to trigger a re-render
   //use it in the onClick of the CategoryInput to set the value of the category
@@ -123,6 +133,7 @@ const RentModal = () => {
             setCustomValue("location", value);
           }}
         />
+        <Map center={watchedLocation?.latlng} />
       </div>
     );
   }
