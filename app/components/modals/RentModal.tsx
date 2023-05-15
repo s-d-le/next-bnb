@@ -8,6 +8,7 @@ import Heading from "../Heading";
 import { categories } from "../navbar/Categories";
 import CategoryInput from "../inputs/CategoryInput";
 import CountrySelect from "../inputs/CountrySelect";
+import Counter from "../inputs/Counter";
 import dynamic from "next/dynamic";
 
 enum STEPS {
@@ -49,6 +50,9 @@ const RentModal = () => {
   //Watch for changes in the category field from defaultValues
   const watchedCategory = watch("category");
   const watchedLocation = watch("location");
+  const guestCount = watch("guestCount");
+  const roomCount = watch("roomCount");
+  const bathroomCount = watch("bathroomCount");
 
   //Import and render map dynamically based on location change. Use useMemo to prevent re-rendering
   const Map = useMemo(
@@ -134,6 +138,43 @@ const RentModal = () => {
           }}
         />
         <Map center={watchedLocation?.latlng} />
+      </div>
+    );
+  }
+
+  if (step === STEPS.INFO) {
+    bodyContent = (
+      <div className="flex flex-col gap-8">
+        <Heading
+          title="Share some basics about your place?"
+          subtitle="What amenities do you offer?"
+        />
+        <Counter
+          title="Number of guests"
+          subTitle="So we can prepare the sheets"
+          value={guestCount}
+          onChange={(value) => {
+            setCustomValue("guestCount", value);
+          }}
+        />
+        <hr />
+        <Counter
+          title="Rooms"
+          subTitle="Getting the right number of beds"
+          value={roomCount}
+          onChange={(value) => {
+            setCustomValue("roomCount", value);
+          }}
+        />
+        <hr />
+        <Counter
+          title="Bathrooms"
+          subTitle="Showers and toilets"
+          value={bathroomCount}
+          onChange={(value) => {
+            setCustomValue("bathroomCount", value);
+          }}
+        />
       </div>
     );
   }
