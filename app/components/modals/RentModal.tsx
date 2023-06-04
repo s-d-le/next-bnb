@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { useForm, FieldValues } from "react-hook-form";
+import { useForm, FieldValues, SubmitHandler } from "react-hook-form";
 import Modal from "./Modal";
 import useRentModal from "@/app/hooks/useRentModal";
 import Heading from "../Heading";
@@ -12,6 +12,9 @@ import Counter from "../inputs/Counter";
 import ImageUpload from "../inputs/ImageUpload";
 import dynamic from "next/dynamic";
 import Input from "../inputs/Input";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 enum STEPS {
   CATEGORY = 0,
@@ -24,6 +27,7 @@ enum STEPS {
 
 const RentModal = () => {
   const rentModal = useRentModal();
+  const router = useRouter();
   const [step, setStep] = useState(STEPS.CATEGORY);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -83,6 +87,29 @@ const RentModal = () => {
 
   const onNext = () => {
     setStep((prev) => prev + 1);
+  };
+
+  //Type of react form with FieldValues
+  const onSubmit: SubmitHandler<FieldValues> = (data) => {
+    if (step !== STEPS.PRICE) {
+      return onNext();
+    }
+    setIsLoading(true);
+    axios
+      .post("/api/listings", data)
+      .then(() => {
+        toast.success("Listing created successfully");
+        router.refresh();
+        reset(); //reset form
+        setStep(STEPS.CATEGORY);
+        rentModal.onClose();
+      })
+      .catch(() => {
+        toast.error("Something went wrong");
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   // Label based on first or last step
@@ -252,7 +279,8 @@ const RentModal = () => {
       title="Airbnb your home!"
       isOpen={rentModal.isOpen}
       onClose={rentModal.onClose}
-      onSubmit={onNext}
+      //use handleSubmit from react-hook-form
+      onSubmit={handleSubmit(onSubmit)}
       actionLabel={actionLabel}
       secondaryActionLabel={secondaryActionLabel}
       secondaryAction={step === STEPS.CATEGORY ? undefined : onBack}
