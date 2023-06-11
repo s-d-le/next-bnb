@@ -1,5 +1,9 @@
 "use client";
 
+/**
+ * Show an empty page while there are no results
+ */
+
 import { useRouter } from "next/navigation";
 import React from "react";
 import Heading from "./Heading";
