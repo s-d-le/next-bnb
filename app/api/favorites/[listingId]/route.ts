@@ -1,3 +1,6 @@
+/**
+ * Will be called by useFavorite hook
+ */
 import { NextResponse } from "next/server";
 
 import { getCurrentUser } from "@/app/actions/getCurrentUser";
