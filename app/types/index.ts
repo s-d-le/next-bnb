@@ -1,7 +1,11 @@
 // CurrentUser expects type User from prisma client but we cleaned it up as string inside getCurrentUser.ts
 // This will replace the type User with SafeUser custom props
 
-import { User } from "@prisma/client";
+import { Listing, User } from "@prisma/client";
+
+export type SafeListing = Omit<Listing, "createdAt"> & {
+  createdAt: string;
+};
 
 export type SafeUser = Omit<
   User,
