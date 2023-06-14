@@ -1,6 +1,5 @@
 "use client";
 
-import { on } from "events";
 import { CldUploadWidget } from "next-cloudinary";
 import Image from "next/image";
 import { useCallback } from "react";
