@@ -49,13 +49,13 @@ const ListingClient: React.FC<ListingClientProps> = ({
           />
           <div className="mt-6 grid grid-cols-7 md:grid-cols-7 md:gap-10">
             <ListingInfo
-              user={listing.user}
+              user={listing?.user}
               category={category}
-              description={listing.description}
-              roomCount={listing.roomCount}
-              guestCount={listing.guestCount}
-              bathroomCount={listing.bathroomCount}
-              locationValue={listing.locationValue}
+              description={listing?.description}
+              roomCount={listing?.roomCount}
+              guestCount={listing?.guestCount}
+              bathroomCount={listing?.bathroomCount}
+              locationValue={listing?.locationValue}
             />
           </div>
         </div>

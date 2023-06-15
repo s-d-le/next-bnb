@@ -5,9 +5,10 @@ import { IconType } from "react-icons";
 import useCountries from "@/app/hooks/useCountries";
 import { SafeUser } from "@/app/types";
 import Avatar from "../Avatar";
+import ListingCategory from "./ListingCategory";
 
 interface ListingInfoProps {
-  user: SafeUser;
+  user: SafeUser | null;
   description: string;
   guestCount: number;
   roomCount: number;
@@ -48,6 +49,13 @@ const ListingInfo: React.FC<ListingInfoProps> = ({
         </div>
       </div>
       <hr />
+      {category && (
+        <ListingCategory
+          icon={category.icon}
+          label={category?.label}
+          description={category?.description}
+        />
+      )}
     </div>
   );
 };
