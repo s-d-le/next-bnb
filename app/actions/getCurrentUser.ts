@@ -1,3 +1,4 @@
+// DB communication with prisma
 // This is a custom action that is used to get the current user from the session
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
