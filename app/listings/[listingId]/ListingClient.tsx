@@ -1,5 +1,9 @@
 "use client";
 
+/**
+ * Single view of a listing
+ */
+
 import { Reservation } from "@prisma/client";
 import { SafeListing, SafeUser } from "@/app/types";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -8,12 +12,16 @@ import Container from "@/app/components/Container";
 import ListingHead from "@/app/components/listings/ListingHead";
 import ListingInfo from "@/app/components/listings/ListingInfo";
 import useLoginModal from "@/app/hooks/useLoginModal";
+
+import { Range } from "react-date-range";
 import { useRouter } from "next/navigation";
 import { eachDayOfInterval, differenceInCalendarDays } from "date-fns";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import ListingReservation from "@/app/components/listings/ListingReservation";
 
-const initialDateRange = {
+//initial reservation dates for calendar
+const initialDateRange: Range = {
   startDate: new Date(),
   endDate: new Date(),
   key: "selection", // Add this key. Without it react-calendar will display a warning
@@ -52,12 +60,12 @@ const ListingClient: React.FC<ListingClientProps> = ({
     let dates: Date[] = [];
 
     reservations.forEach((reservation) => {
-      const range = eachDayOfInterval({
+      const disabledRange = eachDayOfInterval({
         start: new Date(reservation.startDate),
         end: new Date(reservation.endDate),
       });
 
-      dates = [...dates, ...range];
+      dates = [...dates, ...disabledRange];
     });
 
     return dates;
@@ -65,7 +73,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
 
   const [isLoading, setIsLoading] = useState(false);
   const [totalPrice, setTotalPrice] = useState(listing.price);
-  const [dateRange, setDateRange] = useState(initialDateRange);
+  const [dateRange, setDateRange] = useState<Range>(initialDateRange);
 
   const onCreateReservation = useCallback(() => {
     if (!currentUser) {
@@ -130,6 +138,17 @@ const ListingClient: React.FC<ListingClientProps> = ({
               bathroomCount={listing?.bathroomCount}
               locationValue={listing?.locationValue}
             />
+            <div className="order-first mb-10 md:order-last md:col-span-3">
+              <ListingReservation
+                price={listing.price}
+                totalPrice={totalPrice}
+                onChangeDate={(value) => setDateRange(value)}
+                dateRange={dateRange}
+                onSubmit={onCreateReservation}
+                disabled={isLoading}
+                disabledDates={disabledDates}
+              />
+            </div>
           </div>
         </div>
       </div>
