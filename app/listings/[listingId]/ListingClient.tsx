@@ -15,7 +15,7 @@ import useLoginModal from "@/app/hooks/useLoginModal";
 
 import { Range } from "react-date-range";
 import { useRouter } from "next/navigation";
-import { eachDayOfInterval, differenceInCalendarDays } from "date-fns";
+import { eachDayOfInterval, differenceInCalendarDays, setDate } from "date-fns";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import ListingReservation from "@/app/components/listings/ListingReservation";
@@ -87,13 +87,21 @@ const ListingClient: React.FC<ListingClientProps> = ({
         totalPrice,
         startDate: dateRange.startDate,
         endDate: dateRange.endDate,
+        listingId: listing?.id,
       })
       .then(() => {
         toast.success("Reservation created successfully!");
+        setDateRange(initialDateRange); //reset calendar
         // router.push("/trips");
         router.refresh();
+      })
+      .catch((err) => {
+        toast.error("Something went wrong!");
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
-  }, [currentUser, dateRange, totalPrice, loginModal, router]);
+  }, [currentUser, dateRange, totalPrice, loginModal, router, listing.id]);
 
   //Calculate total price based on date range and listing price on every calendar change
   useEffect(() => {
