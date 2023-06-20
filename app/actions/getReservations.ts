@@ -42,9 +42,14 @@ export default async function getReservations(params: IParams) {
       },
     });
 
+    /**
+     * Santize dates. Return the reservations
+     * in ./types/index.ts update the Reservation type to SafeReservation
+     * so it can be used in ListingClient.tsx (frontend)
+     **/
     const safeReservations = reservations.map((reservation) => ({
       ...reservation,
-      createdAt: reservation.createdAt.toISOString(), //convert to ISO string
+      createdAt: reservation.createdAt.toISOString(),
       startDate: reservation.startDate.toISOString(),
       endDate: reservation.endDate.toISOString(),
       listing: {

@@ -12,13 +12,14 @@ import Container from "@/app/components/Container";
 import ListingHead from "@/app/components/listings/ListingHead";
 import ListingInfo from "@/app/components/listings/ListingInfo";
 import useLoginModal from "@/app/hooks/useLoginModal";
+import ListingReservation from "@/app/components/listings/ListingReservation";
+import { SafeReservation } from "@/app/types";
 
 import { Range } from "react-date-range";
 import { useRouter } from "next/navigation";
 import { eachDayOfInterval, differenceInCalendarDays, setDate } from "date-fns";
 import axios from "axios";
 import { toast } from "react-hot-toast";
-import ListingReservation from "@/app/components/listings/ListingReservation";
 
 //initial reservation dates for calendar
 const initialDateRange: Range = {
@@ -28,7 +29,7 @@ const initialDateRange: Range = {
 };
 
 interface ListingClientProps {
-  reservations?: Reservation[];
+  reservations?: SafeReservation[];
   listing?: SafeListing & {
     user: SafeUser; //getListingById returns a listing with a user
   };
