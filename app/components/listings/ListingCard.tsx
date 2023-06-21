@@ -1,18 +1,23 @@
 "use client";
 
 import useCountries from "@/app/hooks/useCountries";
-import { SafeListing, SafeUser } from "@/app/types";
-import { Listing, Reservation } from "@prisma/client";
+import { SafeListing, SafeUser, SafeReservation } from "@/app/types";
 import { useRouter } from "next/navigation";
-import React, { useCallback, useMemo } from "react";
+import { differenceInCalendarDays } from "date-fns";
+import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { format } from "date-fns";
 import Image from "next/image";
 import HeartButton from "../HeartButton";
 import Button from "../Button";
+import { Range } from "react-date-range";
 
+const dateRange: Range = {
+  startDate: new Date(),
+  endDate: new Date(),
+};
 interface ListingCardProps {
   data: SafeListing; //listing data
-  reservation?: Reservation; //reservation data
+  reservation?: SafeReservation; //reservation data
   onAction?: (id: string) => void;
   disabled?: boolean;
   actionLabel?: string;
@@ -20,7 +25,7 @@ interface ListingCardProps {
   currentUser?: SafeUser | null;
 }
 
-const ListingCard: React.FC<ListingCardProps> = ({
+const ListingCard: FC<ListingCardProps> = ({
   data,
   reservation,
   onAction,
@@ -33,6 +38,18 @@ const ListingCard: React.FC<ListingCardProps> = ({
   const { getByValue } = useCountries();
 
   const location = getByValue(data.locationValue); //turn country code into country name
+  const [totalNights, setTotalNights] = useState(0); //total days of reservation
+
+  useEffect(() => {
+    if (reservation) {
+      dateRange.startDate = new Date(reservation.startDate);
+      dateRange.endDate = new Date(reservation.endDate);
+
+      setTotalNights(
+        differenceInCalendarDays(dateRange.endDate, dateRange.startDate)
+      );
+    }
+  }, [reservation]);
 
   //cancel reservation
   const handleCancel = useCallback(
@@ -91,7 +108,14 @@ const ListingCard: React.FC<ListingCardProps> = ({
         </div>
         <div className="flex flex-row items-center gap-1">
           <div className="font-bold">$ {price}</div>
-          {!reservation && <div className="font-light">night</div>}
+          {/* If reserved, show total price instead of pernight */}
+          {!reservation ? (
+            <div className="font-light">night</div>
+          ) : (
+            <div className="text-xs font-light text-neutral-500">
+              /for {totalNights} nights
+            </div>
+          )}
         </div>
         {onAction && actionLabel && (
           <Button
