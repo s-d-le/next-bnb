@@ -4,7 +4,6 @@
  * Single view of a listing
  */
 
-import { Reservation } from "@prisma/client";
 import { SafeListing, SafeUser } from "@/app/types";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { categories } from "@/app/components/navbar/Categories";
@@ -17,7 +16,7 @@ import { SafeReservation } from "@/app/types";
 
 import { Range } from "react-date-range";
 import { useRouter } from "next/navigation";
-import { eachDayOfInterval, differenceInCalendarDays, setDate } from "date-fns";
+import { eachDayOfInterval, differenceInCalendarDays } from "date-fns";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 
@@ -93,8 +92,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
       .then(() => {
         toast.success("Reservation created successfully!");
         setDateRange(initialDateRange); //reset calendar
-        // router.push("/trips");
-        router.refresh();
+        router.push("/trips");
       })
       .catch((err) => {
         toast.error("Something went wrong!");
