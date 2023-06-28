@@ -1,13 +1,18 @@
 import Container from "./components/Container";
 import ClientOnly from "./components/ClientOnly";
 import EmptyState from "./components/EmptyState";
-import getListings from "./actions/getListings";
+import getListings, { IListingsParams } from "./actions/getListings";
 import ListingCard from "./components/listings/ListingCard";
 import { getCurrentUser } from "./actions/getCurrentUser";
 import { SafeListing } from "./types";
 
-export default async function Home() {
-  const listings = await getListings();
+type HomeProps = {
+  searchParams: IListingsParams; //even if params is emtpy it will still be an object
+};
+
+const Home = async ({ searchParams }: HomeProps) => {
+  //Get listings and current user
+  const listings = await getListings(searchParams);
   const currentUser = await getCurrentUser();
 
   if (listings.length === 0) {
@@ -34,3 +39,6 @@ export default async function Home() {
     </ClientOnly>
   );
 }
+
+
+export default Home;
